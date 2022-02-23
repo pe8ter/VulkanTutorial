@@ -118,6 +118,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.204.0\Include;C:\VulkanThirdParty\GLM\glm-0.9.9.8\glm;C:\VulkanThirdParty\GLFW\glfw-3.3.6.bin.WIN64\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>26812</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,6 +138,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.204.0\Include;C:\VulkanThirdParty\GLM\glm-0.9.9.8\glm;C:\VulkanThirdParty\GLFW\glfw-3.3.6.bin.WIN64\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>26812</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

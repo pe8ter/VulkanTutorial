@@ -64,6 +64,12 @@ void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT
 class HelloTriangleApplication {
 
 public:
+
+	HelloTriangleApplication()
+	{
+
+	}
+
 	void run()
 	{
 		initWindow();
@@ -73,12 +79,12 @@ public:
 	}
 
 private:
-	GLFWwindow* window;
-	VkInstance instance;
-	VkDebugUtilsMessengerEXT debugMessenger;
+	GLFWwindow* window = nullptr;
+	VkInstance instance = VK_NULL_HANDLE;
+	VkDebugUtilsMessengerEXT debugMessenger = VK_NULL_HANDLE;
 	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-	VkDevice device;
-	VkQueue graphicsQueue;
+	VkDevice device = VK_NULL_HANDLE;
+	VkQueue graphicsQueue = VK_NULL_HANDLE;
 
 	void initWindow()
 	{
