@@ -247,7 +247,11 @@ private:
 		populateDebugMessengerCreateInfo(createInfo);
 
 		VkResult result = CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger);
-		if (result != VK_SUCCESS)
+		if (result == VK_SUCCESS)
+		{
+			std::cout << "Successfully created debug messenger." << std::endl;
+		}
+		else
 		{
 			throw std::runtime_error("Failed to set up debug messenger.");
 		}
