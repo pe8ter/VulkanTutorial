@@ -165,7 +165,7 @@ private:
 		VkResult result = vkCreateInstance(&createInfo, nullptr, &instance);
 		if (result == VK_SUCCESS)
 		{
-			std::cout << "Successfully created Vulkan instance." << std::endl;
+			print("Successfully created Vulkan instance.");
 		}
 		else
 		{
@@ -201,7 +201,7 @@ private:
 				if (strcmp(vulkExt.extensionName, ext) == 0)
 				{
 					isFound = true;
-					std::cout << std::format("Vulkan instance supports instance extension property {}.", ext) << std::endl;
+					print(std::format("Vulkan instance supports instance extension property {}.", ext));
 					break;
 				}
 			}
@@ -227,7 +227,7 @@ private:
 				if (strcmp(layerName, layerProperties.layerName) == 0)
 				{
 					layerFound = true;
-					std::cout << std::format("Vulkan instance supports validation layer {}.", layerName) << std::endl;
+					print(std::format("Vulkan instance supports validation layer {}.", layerName));
 					break;
 				}
 			}
@@ -253,7 +253,7 @@ private:
 		VkResult result = CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger);
 		if (result == VK_SUCCESS)
 		{
-			std::cout << "Successfully created debug messenger." << std::endl;
+			print("Successfully created debug messenger.");
 		}
 		else
 		{
@@ -285,7 +285,7 @@ private:
 		VkResult result = glfwCreateWindowSurface(instance, window, nullptr, &surface);
 		if (result == VK_SUCCESS)
 		{
-			std::cout << "Successfully created window surface." << std::endl;
+			print("Successfully created window surface.");
 		}
 		else
 		{
@@ -416,7 +416,7 @@ private:
 		VkResult result = vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapChain);
 		if (result == VK_SUCCESS)
 		{
-			std::cout << "Successfully created swap chain." << std::endl;
+			print("Successfully created swap chain.");
 		}
 		else
 		{
@@ -558,7 +558,7 @@ private:
 		VkResult result = vkCreateDevice(physicalDevice, &createInfo, nullptr, &device);
 		if (result == VK_SUCCESS)
 		{
-			std::cout << "Successfully created logical device." << std::endl;
+			print("Successfully created logical device.");
 		}
 		else
 		{
@@ -593,7 +593,7 @@ private:
 			VkResult result = vkCreateImageView(device, &createInfo, nullptr, &swapChainImageViews[i]);
 			if (result == VK_SUCCESS)
 			{
-				std::cout << "Successfully created image view " << i << "." << std::endl;
+				print(std::format("Successfully created image view {}.", i));
 			}
 			else
 			{
@@ -610,8 +610,8 @@ private:
 		std::vector<char> vertShaderCode = readFile(vertShaderPath);
 		std::vector<char> fragShaderCode = readFile(fragShaderPath);
 
-		std::cout << "Vert shader bytes: " << vertShaderCode.size() << std::endl;
-		std::cout << "Frag shader bytes: " << fragShaderCode.size() << std::endl;
+		print(std::format("Vert shader bytes: {}", vertShaderCode.size()));
+		print(std::format("Frag shader bytes: {}", fragShaderCode.size()));
 
 		VkShaderModule vertShaderModule = createShaderModule(vertShaderCode, vertShaderPath);
 		VkShaderModule fragShaderModule = createShaderModule(fragShaderCode, fragShaderPath);
@@ -664,7 +664,7 @@ private:
 		VkResult result = vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule);
 		if (result == VK_SUCCESS)
 		{
-			std::cout << std::format("Successfully created shader module for {}.", filename) << std::endl;
+			print(std::format("Successfully created shader module for {}.", filename));
 		}
 		else
 		{
@@ -698,6 +698,11 @@ private:
 		vkDestroyInstance(instance, nullptr);
 		glfwDestroyWindow(window);
 		glfwTerminate();
+	}
+
+	void print(const std::string& message)
+	{
+		std::cout << std::format("{}: {}", APP_NAME, message) << std::endl;
 	}
 };
 
