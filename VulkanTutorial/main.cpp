@@ -95,6 +95,8 @@ private:
 	VkPipelineLayout pipelineLayout;
 	VkPipeline graphicsPipeline;
 	std::vector<VkFramebuffer> swapChainFramebuffers;
+	VkCommandPool commandPool;
+	std::vector<VkCommandBuffer> commandBuffers;
 
 	void initWindow() {
 		glfwInit();
@@ -114,6 +116,8 @@ private:
 		createRenderPass();
 		createGraphicsPipeline();
 		createFramebuffers();
+		createCommandPool();
+		createCommandBuffers();
 	}
 
 	void createInstance() {
@@ -752,7 +756,77 @@ private:
 			} else {
 				throw std::runtime_error("Failed to create framebuffer.");
 			}
+		}
+	}
 
+	void createCommandPool() {
+		QueueFamilyIndices queueFamilyIndices = findQueueFamilies(physicalDevice);
+
+		VkCommandPoolCreateInfo poolInfo{};
+		poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+		poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
+		poolInfo.flags = 0;
+
+		VkResult result = vkCreateCommandPool(device, &poolInfo, nullptr, &commandPool);
+		if (result == VK_SUCCESS) {
+			print("Successfully created command pool.");
+		} else {
+			throw std::runtime_error("Failed to command pool.");
+		}
+	}
+
+	void createCommandBuffers() {
+		const size_t numCommandBuffers = swapChainImageViews.size();
+		commandBuffers.resize(numCommandBuffers);
+
+		VkCommandBufferAllocateInfo allocInfo{};
+		allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+		allocInfo.commandPool = commandPool;
+		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+		allocInfo.commandBufferCount = (uint32_t)numCommandBuffers;
+
+		VkResult commandBufferResult = vkAllocateCommandBuffers(device, &allocInfo, commandBuffers.data());
+		if (commandBufferResult == VK_SUCCESS) {
+			print("Successfully created command buffers.");
+		} else {
+			throw std::runtime_error("Failed to command buffers.");
+		}
+
+		for (size_t i = 0; i < numCommandBuffers; ++i) {
+			VkCommandBufferBeginInfo beginInfo{};
+			beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+			beginInfo.flags = 0;
+			beginInfo.pInheritanceInfo = nullptr;
+
+			VkResult beginResult = vkBeginCommandBuffer(commandBuffers[i], &beginInfo);
+			if (beginResult == VK_SUCCESS) {
+				print(std::format("Successfully began recording command {}.", i));
+			} else {
+				throw std::runtime_error(std::format("Failed to begin recording command {}.", i));
+			}
+
+			VkRenderPassBeginInfo renderPassInfo{};
+			renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+			renderPassInfo.renderPass = renderPass;
+			renderPassInfo.framebuffer = swapChainFramebuffers[i];
+			renderPassInfo.renderArea.offset = { 0, 0 };
+			renderPassInfo.renderArea.extent = swapChainExtent;
+
+			VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+			renderPassInfo.clearValueCount = 1;
+			renderPassInfo.pClearValues = &clearColor;
+
+			vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+			vkCmdBindPipeline(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
+			vkCmdDraw(commandBuffers[i], 3, 1, 0, 0);
+			vkCmdEndRenderPass(commandBuffers[i]);
+
+			VkResult endResult = vkEndCommandBuffer(commandBuffers[i]);
+			if (beginResult == VK_SUCCESS) {
+				print(std::format("Successfully ended recording command {}.", i));
+			} else {
+				throw std::runtime_error(std::format("Failed to end recording command {}.", i));
+			}
 		}
 	}
 
@@ -763,6 +837,7 @@ private:
 	}
 
 	void cleanup() {
+		vkDestroyCommandPool(device, commandPool, nullptr);
 		for (auto framebuffer : swapChainFramebuffers) {
 			vkDestroyFramebuffer(device, framebuffer, nullptr);
 		}
