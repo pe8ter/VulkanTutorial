@@ -646,8 +646,8 @@ private:
 
 	void createGraphicsPipeline()
 	{
-		const std::string vertShaderPath = "shaders/vert.spv";
-		const std::string fragShaderPath = "shaders/frag.spv";
+		const std::string vertShaderPath = "shaders/dist/vert.spv";
+		const std::string fragShaderPath = "shaders/dist/frag.spv";
 
 		std::vector<char> vertShaderCode = readFile(vertShaderPath);
 		std::vector<char> fragShaderCode = readFile(fragShaderPath);

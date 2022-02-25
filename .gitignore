@@ -5,5 +5,5 @@ x64/
 x86/
 Debug/
 Release/
+dist/
 *.vcxproj.user
-*.spv
