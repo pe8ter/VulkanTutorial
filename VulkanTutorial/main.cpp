@@ -159,6 +159,7 @@ private:
 			createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
 		} else {
 			createInfo.enabledLayerCount = 0;
+			createInfo.ppEnabledLayerNames = nullptr;
 			createInfo.pNext = nullptr;
 		}
 
