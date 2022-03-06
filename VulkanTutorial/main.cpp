@@ -108,6 +108,14 @@ private:
 
 	void initWindow() {
 		glfwInit();
+
+		int vulkanSupported = glfwVulkanSupported();
+		if (vulkanSupported == GLFW_TRUE) {
+			print("GLFW supports Vulkan.");
+		} else {
+			throw std::runtime_error("GLFW does not support Vulkan.");
+		}
+
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 		window = glfwCreateWindow(WIDTH, HEIGHT, APP_NAME.c_str(), nullptr, nullptr);
