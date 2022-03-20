@@ -77,7 +77,8 @@ public:
 		initWindow();
 		initVulkan();
 		mainLoop();
-		cleanup();
+		termVulkan();
+		termWindow();
 	}
 
 private:
@@ -956,7 +957,7 @@ private:
 		vkDeviceWaitIdle(device);
 	}
 
-	void cleanup() {
+	void termVulkan() {
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i) {
 			vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
 			vkDestroySemaphore(device, imageAvailableSemaphores[i], nullptr);
@@ -979,6 +980,9 @@ private:
 		}
 		vkDestroySurfaceKHR(instance, surface, nullptr);
 		vkDestroyInstance(instance, nullptr);
+	}
+
+	void termWindow() {
 		glfwDestroyWindow(window);
 		glfwTerminate();
 	}
